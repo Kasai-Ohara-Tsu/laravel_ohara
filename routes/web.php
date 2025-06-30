@@ -1,12 +1,24 @@
 <?php
-
+//use文。このファイル内で扱うクラスをインポートするための機能
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
+
+//テスト用ルーティング
+//ルートには名前を付けることができる。名前を付けておくと、リンクを張るときに便利。
+Route::get('tests/test',[TestController::class,'index'])->name('test.index');
+
+
+//ルーティングの定義　Route::通信方法(post or get) (アドレス、処理)
+//ex. [/]というURLにアクセスしたら　return view('welcome')という処理を行う。
+//viewでビューファイルを表示。徐堂的にresoueces/viewの名久井を参照し、welcome.blade.phpのファイルのみで指定できる。
 Route::get('/', function () {
     return view('welcome');
 });
 
+//middleware(auth)=>認証機能。ログインしているユーザーでなければdashboardにアクセスできない。
+//ログインしていないユーザーがアクセスすると
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
