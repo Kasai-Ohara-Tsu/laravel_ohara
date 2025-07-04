@@ -58,6 +58,15 @@ class ContactFormController extends Controller
     public function show(string $id)
     {
         //
+        $contact = ContactForm::findOrFail($id);
+
+        if($contact ->gender===0){
+            $gender = '男性';
+        }else{
+            $gender = '女性';
+        }
+
+        return view('contacts.show',compact('contact','gender'));
     }
 
     /**
@@ -66,6 +75,15 @@ class ContactFormController extends Controller
     public function edit(string $id)
     {
         //
+        $contact = ContactForm::findOrFail($id);
+
+        if($contact ->gender===0){
+            $gender = '男性';
+        }else{
+            $gender = '女性';
+        }
+
+        return view('contacts.edit',compact('contact','gender'));
     }
 
     /**
@@ -74,6 +92,19 @@ class ContactFormController extends Controller
     public function update(Request $request, string $id)
     {
         //
+         //DBに以下の情報をまとめて登録する処理
+        $before_contact = ContactForm::findOrFail($id);
+
+            $before_contact->name = $request->name;
+            $before_contact->title = $request->title;
+            $before_contact->email = $request->email;
+            $before_contact->url = $request->url;
+            $before_contact->gender = $request->gender;
+            $before_contact->age = $request->age;
+            $before_contact->contact = $request->contact;
+            $before_contact->save();
+        //indexページにリダイレクト
+        return to_route('contacts.index');
     }
 
     /**
