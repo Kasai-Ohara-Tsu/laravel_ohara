@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\ContactForm;
 use Illuminate\Http\Request;
+use App\Services\CheckFormService;
+use App\Http\Requests\StoreContactRequest;
 
 class ContactFormController extends Controller
 {
@@ -35,9 +37,8 @@ class ContactFormController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-       
+    public function store(StoreContactRequest $request){
+    
         //DBに以下の情報をまとめて登録する処理
         ContactForm::create([
             'name' => $request->name, 
@@ -50,21 +51,17 @@ class ContactFormController extends Controller
         ]);
         //indexページにリダイレクト
         return to_route('contacts.index');
-    }
+        }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        
         $contact = ContactForm::findOrFail($id);
 
-        if($contact ->gender===0){
-            $gender = '男性';
-        }else{
-            $gender = '女性';
-        }
+        CheckFormService::checkGender($contact);
 
         return view('contacts.show',compact('contact','gender'));
     }
@@ -77,12 +74,8 @@ class ContactFormController extends Controller
         //
         $contact = ContactForm::findOrFail($id);
 
-        if($contact ->gender===0){
-            $gender = '男性';
-        }else{
-            $gender = '女性';
-        }
-
+        CheckFormService::checkGender($contact);
+        
         return view('contacts.edit',compact('contact','gender'));
     }
 
@@ -113,5 +106,11 @@ class ContactFormController extends Controller
     public function destroy(string $id)
     {
         //
+        $contact = ContactForm::findOrFail($id);
+        $contact->delete();
+
+        return to_route('contacts.index');
+
+
     }
 }

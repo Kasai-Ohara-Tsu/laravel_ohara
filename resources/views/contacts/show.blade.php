@@ -83,19 +83,33 @@
                                 <div class="p-2 w-full">
                                 <button type="button" onclick="location.href='{{route('contacts.edit',['id'=>$contact->id])}}'" class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">編集</button>
                                 </div>
+
                                 <div class="p-2 w-full">
                                 <button type="button" onclick="location.href='{{route('contacts.index')}}'" class="flex mx-auto text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">戻る</button>
                                 </div>
-                                </div>
 
+                                <form action = "{{route('contacts.destroy',['id'=>$contact->id])}}" method = post id = "delete_{{$contact->id}}">
+                                    @csrf
+                                        <div class="p-2 w-full">
+                                        <button type="button" data-id = "{{$contact->id}}" onclick="deletePost(this)" class="flex mx-auto text-white bg-yellow-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">削除</button>
+                                        </div>
+                                </form>
+                                </div>
                             </div>
                             </div>
                         </div>
                     </section>
-
-
                 </div>
             </div>
         </div>
     </div>
+
+<script> 
+    function deletePost(e){ 
+        'use strict'
+    if(confirm('本当に削除していいですか？')){ 
+        document.getElementById('delete_' + e.dataset.id).submit() 
+    }}
+</script> 
+
 </x-app-layout>
